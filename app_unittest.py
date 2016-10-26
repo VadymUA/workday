@@ -5,28 +5,41 @@
 
 import sys
 import unittest
-from app_lib import Calculator, Matrix, Keymap
 import app_cli as __unit__
+from app_lib import Calculator, Matrix, Keymap
 
 
 class MyTestCase(unittest.TestCase):
+    def setUp(self):
+        config = {}
+        cfile = "app.conf"
+        try:
+            execfile(cfile, config)
+        except:
+            raise IOError("Config file '%s' is absent" % cfile)
+        else:
+            execfile("app.conf", config)
+            self.params = config['params']
+            self.limit = config['limit']
+
+    def tearDown(self):
+        pass
+
     def test_calculator(self):
         """Checking for the correct answer"""
         numbers = [1, 2, 3, 4, 5, 6]
         target = 12
         expected = '1 * 2 * 6 = 12'
-        limit = 1024
-        calculator = Calculator(numbers, target, Matrix(numbers, target, Keymap(numbers), limit))
+        calculator = Calculator(self.numbers, target, Matrix(self.numbers, target, Keymap(self.numbers), self.limit))
         self.assertEqual(expected, calculator.get_result())
 
     def test_deviation(self):
         """Checking for the deviated answer"""
         numbers = [1, 2, 3, 4, 5, 6]
         target = 13
-        expected = '1 * 2 * 6 = 13'
-        limit = 1024
-        calculator = Calculator(numbers, target, Matrix(numbers, target, Keymap(numbers), limit))
-        self.assertEqual(expected, calculator.get_result())
+        result = '1 * 2 * 6 = 13'
+        calculator = Calculator(self.numbers, target, Matrix(self.numbers, target, Keymap(self.numbers), self.limit))
+        self.assertEqual(result, calculator.get_result())
 
     def test_cli_calculator(self):
         """Checking CLI for the correct answer"""
