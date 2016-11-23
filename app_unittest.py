@@ -7,16 +7,17 @@ from app_lib import Calculator, Matrix, Keymap
 
 class MyTestCase(unittest.TestCase):
     def setUp(self):
-        config = {}
-        cfile = os.path.abspath("app.conf")
+        config_body = {}
+        config_name = 'app.conf'
+        application_path = os.path.dirname(os.path.realpath(__file__)) + os.sep
+        config_file = os.path.join(application_path, config_name)
+
         try:
-            execfile(cfile, config)
+            execfile(config_file, config_body)
+            self.params = config_body['params']
+            self.limit = config_body['limit']
         except:
-            raise IOError("Config file {} is absent".format(cfile))
-        else:
-            execfile(cfile, config)
-            self.params = config['params']
-            self.limit = config['limit']
+            raise IOError("Config file {} is absent".format(config_file))
 
     def tearDown(self):
         pass
