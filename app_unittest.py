@@ -1,8 +1,4 @@
-#! /usr/bin/python2.7
-#
-
-"""Maintainer: VadymT <help2any1@gmail.com>"""
-
+import os
 import sys
 import unittest
 import app_cli as __unit__
@@ -12,13 +8,13 @@ from app_lib import Calculator, Matrix, Keymap
 class MyTestCase(unittest.TestCase):
     def setUp(self):
         config = {}
-        cfile = "app.conf"
+        cfile = os.path.abspath("app.conf")
         try:
             execfile(cfile, config)
         except:
-            raise IOError("Config file '%s' is absent" % cfile)
+            raise IOError("Config file {} is absent".format(cfile))
         else:
-            execfile("app.conf", config)
+            execfile(cfile, config)
             self.params = config['params']
             self.limit = config['limit']
 
@@ -30,7 +26,7 @@ class MyTestCase(unittest.TestCase):
         numbers = [1, 2, 3, 4, 5, 6]
         target = 12
         expected = '1 * 2 * 6 = 12'
-        calculator = Calculator(self.numbers, target, Matrix(self.numbers, target, Keymap(self.numbers), self.limit))
+        calculator = Calculator(numbers, target, Matrix(numbers, target, Keymap(numbers), self.limit))
         self.assertEqual(expected, calculator.get_result())
 
     def test_deviation(self):
@@ -38,7 +34,7 @@ class MyTestCase(unittest.TestCase):
         numbers = [1, 2, 3, 4, 5, 6]
         target = 13
         result = '1 * 2 * 6 = 13'
-        calculator = Calculator(self.numbers, target, Matrix(self.numbers, target, Keymap(self.numbers), self.limit))
+        calculator = Calculator(numbers, target, Matrix(numbers, target, Keymap(numbers), self.limit))
         self.assertEqual(result, calculator.get_result())
 
     def test_cli_calculator(self):
