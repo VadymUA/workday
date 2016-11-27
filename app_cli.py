@@ -25,7 +25,7 @@ def main():
         params = config_body['params']
         limit = config_body['limit']
     except:
-        raise IOError("Config file {} is absent".format(config_file))
+        raise IOError("Config file {} is absent".format(config_name))
 
     if len(sys.argv) > 1:
         if len(sys.argv[1:]) != params:
@@ -44,4 +44,5 @@ def main():
     return calculator.get_result()
 
 if __name__ == '__main__':
-    print main()
+    run = main()
+    print run
